@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Jarvis Finance Diary - Voice-Powered Financial Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <span>Jarvis Finance</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#expenses" class="nav-link" data-section="expenses"><i class="fas fa-receipt"></i> Expenses</a></li>
+                <li><a href="#investments" class="nav-link" data-section="investments"><i class="fas fa-chart-pie"></i> Investments</a></li>
+                <li><a href="#goals" class="nav-link" data-section="goals"><i class="fas fa-bullseye"></i> Goals</a></li>
+                <li><a href="#emi" class="nav-link" data-section="emi"><i class="fas fa-credit-card"></i> EMI</a></li>
+                <li><a href="#profile" class="nav-link" data-section="profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="auth-container">
+                <div class="auth-form active" id="loginForm">
+                    <h2>🔓 Login</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Login</button>
+                        <p class="form-toggle">Don't have an account? <a href="#" onclick="toggleAuth()">Register</a></p>
+                    </form>
+                </div>
+
+                <div class="auth-form" id="registerForm">
+                    <h2>📝 Register</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <input type="text" id="regName" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" placeholder="Min 8 characters" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">Confirm Password</label>
+                            <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Register</button>
+                        <p class="form-toggle">Already have an account? <a href="#" onclick="toggleAuth()">Login</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="container">
+                <h1>📊 Financial Dashboard</h1>
+                
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon expenses"><i class="fas fa-money-bill-wave"></i></div>
+                        <div class="stat-content">
+                            <h3>Monthly Expenses</h3>
+                            <p class="stat-value">₹<span id="totalExpenses">0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon investments"><i class="fas fa-chart-pie"></i></div>
+                        <div class="stat-content">
+                            <h3>Total Investments</h3>
+                            <p class="stat-value">₹<span id="totalInvestments">0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon savings"><i class="fas fa-piggy-bank"></i></div>
+                        <div class="stat-content">
+                            <h3>Savings Goals</h3>
+                            <p class="stat-value">₹<span id="totalSavings">0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon emi"><i class="fas fa-credit-card"></i></div>
+                        <div class="stat-content">
+                            <h3>Monthly EMI</h3>
+                            <p class="stat-value">₹<span id="monthlyEMI">0</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Score -->
+                <div class="health-section">
+                    <div class="health-card">
+                        <h2>💚 Financial Health Score</h2>
+                        <div class="health-score">
+                            <div class="score-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" class="score-bg"></circle>
+                                    <circle cx="50" cy="50" r="45" class="score-fill" style="stroke-dasharray: 0"></circle>
+                                </svg>
+                                <div class="score-text">
+                                    <span class="score-number" id="healthScore">0</span>
+                                    <span class="score-label" id="healthLabel">-</span>
+                                </div>
+                            </div>
+                            <div class="health-recommendations" id="healthRecommendations"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>📈 Expenses by Category</h3>
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>💹 Spending Trend</h3>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Predictions -->
+                <div class="predictions-card">
+                    <h2>🔮 Next Month Prediction</h2>
+                    <div class="prediction-content">
+                        <div class="prediction-stat">
+                            <span class="prediction-label">Average Monthly:</span>
+                            <span class="prediction-value">₹<span id="avgExpense">0</span></span>
+                        </div>
+                        <div class="prediction-stat">
+                            <span class="prediction-label">Predicted Next:</span>
+                            <span class="prediction-value">₹<span id="predictedExpense">0</span></span>
+                        </div>
+                        <div class="prediction-stat">
+                            <span class="prediction-label">Trend:</span>
+                            <span class="prediction-trend" id="spendingTrend">-</span>
+                        </div>
+                    </div>
+                    <p class="prediction-insight" id="predictionInsight"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expenses Section -->
+        <section id="expenses" class="section">
+            <div class="container">
+                <h1>💰 Expense Tracker</h1>
+                
+                <div class="section-toolbar">
+                    <button class="btn btn-primary" onclick="toggleAddExpense()"><i class="fas fa-plus"></i> Add Expense</button>
+                    <button class="btn btn-voice" id="voiceBtn"><i class="fas fa-microphone"></i> Voice Input</button>
+                    <select id="categoryFilter" class="form-control">
+                        <option value="">All Categories</option>
+                        <option value="Food">🍔 Food</option>
+                        <option value="Transport">🚗 Transport</option>
+                        <option value="Entertainment">🎬 Entertainment</option>
+                        <option value="Utilities">💡 Utilities</option>
+                        <option value="Healthcare">🏥 Healthcare</option>
+                        <option value="Shopping">🛒 Shopping</option>
+                        <option value="Other">📋 Other</option>
+                    </select>
+                </div>
+
+                <div id="addExpenseForm" class="form-modal hidden">
+                    <form class="form-card">
+                        <h3>Add New Expense</h3>
+                        <div class="form-group">
+                            <label for="expAmount">Amount (₹)</label>
+                            <input type="number" id="expAmount" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expCategory">Category</label>
+                            <select id="expCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Food">🍔 Food</option>
+                                <option value="Transport">🚗 Transport</option>
+                                <option value="Entertainment">🎬 Entertainment</option>
+                                <option value="Utilities">💡 Utilities</option>
+                                <option value="Healthcare">🏥 Healthcare</option>
+                                <option value="Shopping">🛒 Shopping</option>
+                                <option value="Other">📋 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="expDesc">Description</label>
+                            <input type="text" id="expDesc" placeholder="What did you spend on?">
+                        </div>
+                        <div class="form-group">
+                            <label for="expDate">Date</label>
+                            <input type="date" id="expDate" required>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Add</button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleAddExpense()"><i class="fas fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="expenses-list" id="expensesList">
+                    <p class="no-data">No expenses yet. Add one to get started!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investments Section -->
+        <section id="investments" class="section">
+            <div class="container">
+                <h1>💹 Investment Portfolio</h1>
+                
+                <div class="section-toolbar">
+                    <button class="btn btn-primary" onclick="toggleAddInvestment()"><i class="fas fa-plus"></i> Add Investment</button>
+                </div>
+
+                <div id="addInvestmentForm" class="form-modal hidden">
+                    <form class="form-card">
+                        <h3>Add New Investment</h3>
+                        <div class="form-group">
+                            <label for="invName">Investment Name</label>
+                            <input type="text" id="invName" placeholder="e.g., Apple Stock" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="invType">Type</label>
+                            <select id="invType" required>
+                                <option value="">Select Type</option>
+                                <option value="stocks">📈 Stocks</option>
+                                <option value="bonds">📊 Bonds</option>
+                                <option value="mutual_funds">🎯 Mutual Funds</option>
+                                <option value="crypto">₿ Cryptocurrency</option>
+                                <option value="real_estate">🏠 Real Estate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="invAmount">Invested Amount (₹)</label>
+                            <input type="number" id="invAmount" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="invCurrentValue">Current Value (₹)</label>
+                            <input type="number" id="invCurrentValue" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Add</button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleAddInvestment()"><i class="fas fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="investments-grid" id="investmentsList">
+                    <p class="no-data">No investments yet. Start investing to grow your wealth!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Savings Goals Section -->
+        <section id="goals" class="section">
+            <div class="container">
+                <h1>🎯 Savings Goals</h1>
+                
+                <div class="section-toolbar">
+                    <button class="btn btn-primary" onclick="toggleAddGoal()"><i class="fas fa-plus"></i> Add Goal</button>
+                </div>
+
+                <div id="addGoalForm" class="form-modal hidden">
+                    <form class="form-card">
+                        <h3>Create New Goal</h3>
+                        <div class="form-group">
+                            <label for="goalName">Goal Name</label>
+                            <input type="text" id="goalName" placeholder="e.g., Vacation Fund" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="goalTarget">Target Amount (₹)</label>
+                            <input type="number" id="goalTarget" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="goalCurrent">Current Amount (₹)</label>
+                            <input type="number" id="goalCurrent" placeholder="0.00" step="0.01" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="goalDeadline">Target Date</label>
+                            <input type="date" id="goalDeadline">
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Create</button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleAddGoal()"><i class="fas fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="goals-list" id="goalsList">
+                    <p class="no-data">No goals yet. Set your first savings goal!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EMI Section -->
+        <section id="emi" class="section">
+            <div class="container">
+                <h1>💳 EMI Plans</h1>
+                
+                <div class="section-toolbar">
+                    <button class="btn btn-primary" onclick="toggleAddEMI()"><i class="fas fa-plus"></i> Add EMI Plan</button>
+                </div>
+
+                <div id="addEMIForm" class="form-modal hidden">
+                    <form class="form-card">
+                        <h3>Create New EMI Plan</h3>
+                        <div class="form-group">
+                            <label for="emiName">EMI Name</label>
+                            <input type="text" id="emiName" placeholder="e.g., Car Loan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emiPrincipal">Principal Amount (₹)</label>
+                            <input type="number" id="emiPrincipal" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emiRate">Annual Interest Rate (%)</label>
+                            <input type="number" id="emiRate" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emiTenure">Tenure (Months)</label>
+                            <input type="number" id="emiTenure" placeholder="60" step="1" required>
+                        </div>
+                        <div class="emi-calculator" id="emiResult" style="display:none;">
+                            <p>Monthly EMI: <strong>₹<span id="calcEMI">0</span></strong></p>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Create</button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleAddEMI()"><i class="fas fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="emi-list" id="emiList">
+                    <p class="no-data">No EMI plans yet.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="container">
+                <h1>👤 Profile & Settings</h1>
+                
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="profileName">User Name</h2>
+                            <p id="profileEmail">user@example.com</p>
+                        </div>
+                    </div>
+                    <div class="profile-content">
+                        <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        <button class="btn btn-secondary" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Export Monthly Report</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Voice Button -->
+    <button class="floating-voice-btn" id="floatingVoiceBtn" title="Click to record voice command">
+        <i class="fas fa-microphone"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="spinner hidden">
+        <div class="spinner-border"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
